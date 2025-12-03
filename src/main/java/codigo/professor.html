@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://app.unpkg.com/css.gg@2.0.0/files/icons">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Carrois+Gothic+SC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/estilo">
+    <title>Tarefas</title>
+</head>
+<body>
+<main class="container">
+    <form action="/professor" method="post">
+        <div class="log">
+            <h2>Tarefas 📑</h2>
+        </div>
+        <div class="tarefa">
+            <label for="tarefa"> 
+                    <textarea id="tarefa" name="tarefa" rows="15" cols="40" required>
+                    </textarea>
+            </label>
+        </div>
+        <div class="container-2">
+            <div class="input-box">
+                <select id="materia" name="materia"  required>
+                    <option value="Máteria">Máteria</option>
+                    <option value="Arte">Arte 🎨</option>
+                    <option value="Biologia">Biologia 🧬</option>
+                    <option value="Educaçao-Fisica">Educação Física ⚽</option>
+                    <option value="Filosofia">Filosofia 🏛️</option>
+                    <option value="Fisica">Física 📏</option>
+                    <option value="Geografia">Geografia 🌎</option>
+                    <option value="Historia">História 📖</option>
+                    <option value="Ingles">Língua Inglesa ✈️</option>
+                    <option value="Portugues">Língua Portuguesa 📄</option>
+                    <option value="Matematica">Matemática 🔢</option>
+                    <option value="Quimica">Química 🧪</option>
+                    <option value="Sociologia">Sociologia 🏙️</option>
+                    <option value="CursosEAD">Cursos EAD 🎯 </option>
+                    <option value="LIMA">Linguagem de Marcação ⌨️</option>
+                    <option value="Back-end">Programação Back-End 🧑‍💻</option>
+                    <option value="BancodeDados">Banco de Dados 🛢️</option>
+                    <option value="Projetos">Projetos de Software 📋</option>
+            </div>
+            <div class="data">
+                <label>Data:</label><br>
+                <input type="date" name="data" required><br><br>
+            </div><br>
+        </div>
+        <div class="observacao">
+            <label>Observação:</label>
+            <input type="text" name="observacao" >
+        </div>
+
+        <div class="buttonstarefas"></div>
+            <button type="submit">Adicionar</button>
+            <button><a href="/" class="voltar">Voltar</a></button>
+        </div>
+        </div>
+    </form>
+
+</body>
+</html>
