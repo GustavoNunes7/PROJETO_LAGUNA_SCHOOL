@@ -27,6 +27,8 @@ input, textarea, button {
 body{
     display: flex;
     justify-content: center;
+    flex-direction:column;
+    gap:9px;
     align-items: center;
     min-height: 100vh;
     background: url('./fundo.png');
@@ -81,6 +83,7 @@ body{
 
 
 }
+
 
 .input-box select{
     width: 100%;
@@ -166,7 +169,17 @@ body{
 
 /* ----------------- CARDS ----------------- */
 
+h1{
+    color:#ffffff;
+    font-size: 46px;
+    text-align: center;
+    font-family: "DM Serif Text", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
 .card {
+
     background: #ffffff;
     border: 1px solid #cccccc;
     border-radius: 5px;
