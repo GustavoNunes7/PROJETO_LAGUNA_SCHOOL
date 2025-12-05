@@ -229,7 +229,7 @@ public class Servidor {
                 String tare = rs.getString("tarefa");
                 String mate = rs.getString("materia");
                 String data = rs.getString("data");
-                String obse = rs.getString("obsersevacao");
+                String obse = rs.getString("observacao");
                 String feito = rs.getString("feito");
 
                 // Classe extra para cor do card
@@ -252,14 +252,14 @@ public class Servidor {
                 // Botão FEITO
                 html.append("<form method=\"POST\" action=\"/avaliar\">");
                 html.append("<input type=\"hidden\" name=\"id\" value=\"").append(id).append("\">");
-                html.append("<input type=\"hidden\" name=\"acao\" value=\"feito\">");
+                html.append("<input type=\"hidden\" name=\"acao\" value=\"Feito\">");
                 html.append("<button type=\"submit\">Feito</button>");
                 html.append("</form>");
 
                 // Botão NÃO FEITO
                 html.append("<form method=\"POST\" action=\"/avaliar\">");
                 html.append("<input type=\"hidden\" name=\"id\" value=\"").append(id).append("\">");
-                html.append("<input type=\"hidden\" name=\"acao\" value=\"nao\">");
+                html.append("<input type=\"hidden\" name=\"acao\" value=\"Não Feito\">");
                 html.append("<button type=\"submit\">Não Feito</button>");
                 html.append("</form>");
 
