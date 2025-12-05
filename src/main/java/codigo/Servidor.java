@@ -46,117 +46,81 @@ public class Servidor {
     }
 
     // -------------------- LOGIN --------------------
+        private static void login (HttpExchange t) throws IOException {
+            if (!t.getRequestMethod().equalsIgnoreCase("POST")) {
+                enviar(t, "login.html");
+                return;
+            }
 
-    private static void login(HttpExchange t) throws IOException {
-        if (!t.getRequestMethod().equalsIgnoreCase("POST")) {
-            enviar(t, "login.html");
-            return;
-        }
-
-        String corpo = ler(t); // exemplo: tipo=produtor
-        corpo = URLDecoder.decode(corpo, StandardCharsets.UTF_8);
-
-        System.out.println(corpo);
-
-
-
-
-        //-------------------------------- Cadastro dos Professores-----------------------------------
+            String corpo = ler(t); // exemplo: tipo=produtor
+            corpo = URLDecoder.decode(corpo, StandardCharsets.UTF_8);
+            // Cadastro dos Professores
+            //String query = t.getRequestURI().getQuery(); // usuario=luiza&senha=12345&perfil=professor
+            String[] partes = corpo.split("&");
+            String usuario = partes[0].replace("usuario=", "");
+            String senha = partes[1].replace("senha=", "");
+            String perfil = partes[2].replace("perfil=", "");
 
 
 
-        if (corpo.contains("professor")){ //perfil
-            System.out.println("PROFESSOR");
-            if (corpo.contains("professor")) { // usuario
-                System.out.println("professor");
-                if(corpo.contains("1234")){ // senha
-                    System.out.println("Acesso liberado: Professor");
+
+            //-------------------------------- Cadastro dos Professores-----------------------------------
+
+            // Validação de login para Professores
+            if (perfil.equals("professor")) {
+                if (usuario.equals("professor") && senha.equals("1234")) {
+                    System.out.println("Acesso autorizado: Professor");
                     t.getResponseHeaders().set("Location", "/professor");
-                    t.sendResponseHeaders(302, -1L);
-
+                    t.sendResponseHeaders(302, -1);
                 }
-            }
-        }
-        if (corpo.contains("professor")){ //perfil
-            System.out.println("PROFESSOR");
-            if (corpo.contains("arieldias")) { // usuario
-                System.out.println("arieldias");
-                if(corpo.contains("1234")){ // senha
-                    System.out.println("Acesso liberado: Professor Ariel Dias");
+                else if (usuario.equals("arieldias") && senha.equals("1234")) {
+                    System.out.println("Acesso autorizado: Professor Ariel Dias");
                     t.getResponseHeaders().set("Location", "/professor");
-                    t.sendResponseHeaders(302, -1L);
+                    t.sendResponseHeaders(302, -1);
                 }
-            }
-        }
-
-        if (corpo.contains("professor")){ //perfil
-            System.out.println("PROFESSOR");
-            if (corpo.contains("eduardofalabella")) { // usuario
-                System.out.println("eduardofalabella");
-                if(corpo.contains("1234")){ // senha
-                    System.out.println("Acesso liberado: Professor Eduardo Falabella");
+                else if (usuario.equals("eduardofalabella") && senha.equals("1234")) {
+                    System.out.println("Acesso autorizado: Professor Eduardo Falabella");
                     t.getResponseHeaders().set("Location", "/professor");
-                    t.sendResponseHeaders(302, -1L);
+                    t.sendResponseHeaders(302, -1);
+                }
+                else {
+                    System.out.println("Acesso negado");
+                    t.getResponseHeaders().set("Location", "/acessonegado");
+                    t.sendResponseHeaders(302, -1);
                 }
             }
-        }
 
-        //-------------------------------- Cadastro dos Alunos-----------------------------------//
-
-        if (corpo.contains("aluno")){ //perfil
-            System.out.println("ALUNO");
-            if (corpo.contains("aluno")) { // usuario
-                System.out.println("aluno");
-                if(corpo.contains("1234")){ // senha
-                    System.out.println("Acesso liberado: Aluno");
+            // Validação de login para Alunos
+            else if (perfil.equals("aluno")) {
+                if (usuario.equals("aluno") && senha.equals("1234")) {
+                    System.out.println("Acesso autorizado: Aluno");
                     t.getResponseHeaders().set("Location", "/aluno");
-                    t.sendResponseHeaders(302, -1L);
-                }
-            }
-        }
-
-        if (corpo.contains("aluno")){ //perfil
-            System.out.println("ALUNO");
-            if (corpo.contains("carinasouza")) { // usuario
-                System.out.println("carinasouza");
-                if(corpo.contains("1234")){ // senha
-                    System.out.println("Acesso liberado: Aluna Carina Souza");
+                    t.sendResponseHeaders(302, -1);
+                } else if (usuario.equals("gustavonunes") && senha.equals("1234")) {
+                    System.out.println("Acesso autorizado: Aluno Gustavo Nunes");
                     t.getResponseHeaders().set("Location", "/aluno");
-                    t.sendResponseHeaders(302, -1L);
-                }
-            }
-        }
-
-        if (corpo.contains("aluno")){ //perfil
-            System.out.println("ALUNO");
-            if (corpo.contains("luizatimporini")) { // usuario
-                System.out.println("luizatimporini");
-                if(corpo.contains("1234")){ // senha
-                    System.out.println("Acesso liberado: Aluna Luiza Timporini");
+                    t.sendResponseHeaders(302, -1);
+                } else if (usuario.equals("carinasouza") && senha.equals("1234")) {
+                    System.out.println("Acesso autorizado: Aluna Carina Souza");
                     t.getResponseHeaders().set("Location", "/aluno");
-                    t.sendResponseHeaders(302, -1L);
-                }
-            }
-        }
-
-        if (corpo.contains("aluno")){ //perfil
-            System.out.println("ALUNO");
-            if (corpo.contains("gustavonunes")) { // usuario
-                System.out.println("gustavonunes");
-                if(corpo.contains("1234")){ // senha
-                    System.out.println("Acesso liberado: Aluno Gustavo Nunes");
+                    t.sendResponseHeaders(302, -1);
+                } else if (usuario.equals("luizatimporini") && senha.equals("1234")) {
+                    System.out.println("Acesso autorizado: Aluna Luiza Timporini");
                     t.getResponseHeaders().set("Location", "/aluno");
-                    t.sendResponseHeaders(302, -1L);
+                    t.sendResponseHeaders(302, -1);
+                } else {
+                    System.out.println("Acesso negado - Aluno");
+                    t.getResponseHeaders().set("Location", "/acessonegado");
+                    t.sendResponseHeaders(302, -1);
                 }
+            } else {
+                System.out.println("Acesso negado");
+                t.getResponseHeaders().set("Location", "/acessonegado");
+                t.sendResponseHeaders(302, -1);
             }
         }
 
-        else{
-            System.out.println("Acesso Negado");
-            t.getResponseHeaders().set("Location", "/acessonegado");
-            t.sendResponseHeaders(302, -1L);
-        }
-   }
+
 
     // -------------------- PROFESSOR --------------------------------------//
 
@@ -168,22 +132,21 @@ public class Servidor {
         }
 
         String c = URLDecoder.decode(ler(t), StandardCharsets.UTF_8);
-        System.out.println("dados  "+c);
 
 
         String[] partes;
-        partes=c.split("&");
-        String tarefa =partes[0].replace("tarefa=","") ;
-        String materia = partes[1].replace("materia=","");
-        String data = partes[2].replace("data=","");
-        String observacao = partes[3].replace("observacao=","");
-        System.out.println("aaaa:" + tarefa + materia +data +observacao);
+        partes = c.split("&");
+        String tarefa = partes[0].replace("tarefa=", "");
+        String materia = partes[1].replace("materia=", "");
+        String data = partes[2].replace("data=", "");
+        String observacao = partes[3].replace("observacao=", "");
+
 
         String tare = pega(c, "tarefa");
         String mate = pega(c, "materia");
         String date = pega(c, "data");
         String obse = pega(c, "observacao");
-        System.out.println(tare + mate +  date + obse);
+
 
         try (PreparedStatement ps = con.prepareStatement(
                 "INSERT INTO dadosx (tarefa, materia, data, observacao, feito) VALUES (?,?,?,?,?)")) {
@@ -206,7 +169,7 @@ public class Servidor {
 
     private static void aluno(HttpExchange t) throws IOException {
         StringBuilder html = new StringBuilder();
-
+    
         html.append("<!DOCTYPE html>");
         html.append("<html><head>");
         html.append("<meta charset=\"UTF-8\">");
@@ -280,7 +243,6 @@ public class Servidor {
 
         // Enviar HTML gerado
         byte[] b = html.toString().getBytes(StandardCharsets.UTF_8);
-        System.out.println(b);
         t.getResponseHeaders().add("Content-Type", "text/html; charset=UTF-8");
         t.sendResponseHeaders(200, b.length);
         t.getResponseBody().write(b);
@@ -353,7 +315,6 @@ public class Servidor {
 
     private static void enviar(HttpExchange t, String arq) throws IOException {
         File f = new File("src/main/java/codigo/" + arq);
-        System.out.println(f);
         byte[] b = java.nio.file.Files.readAllBytes(f.toPath());
         t.getResponseHeaders().add("Content-Type", "text/html; charset=UTF-8");
         t.sendResponseHeaders(200, b.length);
@@ -363,7 +324,6 @@ public class Servidor {
 
     private static void enviarCSS(HttpExchange t, String arq) throws IOException {
         File f = new File("src/main/java/codigo/" + arq);
-        System.out.println("CSS  "+f);
         byte[] b = java.nio.file.Files.readAllBytes(f.toPath());
         t.getResponseHeaders().add("Content-Type", "text/css; charset=UTF-8");
         t.sendResponseHeaders(200, b.length);
