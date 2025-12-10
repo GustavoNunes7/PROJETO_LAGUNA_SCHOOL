@@ -67,7 +67,7 @@ public class Servidor {
             //-------------------------------- Cadastro dos Professores-----------------------------------
 
             // Validação de login para Professores
-            if (perfil.equals("professor")) {
+            if (perfil.contains("professor")) {
                 if (usuario.equals("professor") && senha.equals("1234")) {
                     System.out.println("Acesso autorizado: Professor");
                     t.getResponseHeaders().set("Location", "/professor");
@@ -91,7 +91,7 @@ public class Servidor {
             }
 
             // Validação de login para Alunos
-            else if (perfil.equals("aluno")) {
+            else if (perfil.contains("aluno")) {
                 if (usuario.equals("aluno") && senha.equals("1234")) {
                     System.out.println("Acesso autorizado: Aluno");
                     t.getResponseHeaders().set("Location", "/aluno");
