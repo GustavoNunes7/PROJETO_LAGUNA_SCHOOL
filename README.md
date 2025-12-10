@@ -1,0 +1,5 @@
+A empresa TechGo foi contratada pela escola **Laguna School** 🏫 para desenvolver uma solução moderna e eficiente que facilitasse a comunicação entre professores e alunos. O objetivo do projeto era criar uma **agenda digital** 📅 onde os professores pudessem cadastrar atividades, tarefas e notificações importantes 🔔, enquanto os estudantes teriam acesso rápido e fácil a todas essas informações.
+
+Para garantir um sistema robusto, seguro e de alta performance, a TechGo utilizou diversas tecnologias reconhecidas no mercado: **Java** ☕ para o desenvolvimento do back-end, assegurando estabilidade e bom processamento; **HTML** e **CSS** 🎨 para construir e estilizar a interface, tornando-a intuitiva e agradável; além de um **banco de dados** 🗄️ responsável por armazenar todas as informações de forma organizada e acessível.
+
+O resultado foi uma plataforma funcional, responsiva e alinhada às necessidades da **Laguna School**. Com a nova agenda digital, a comunicação escolar tornou-se mais clara, prática e acessível, trazendo mais organização ao dia a dia de professores e alunos 🌟📘.
