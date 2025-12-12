@@ -130,7 +130,7 @@ body{
 
 
 
-
+/* O hover CSS é quando o cursor do mouse passa sobre ele */
 .login:hover{
     background-color: transparent;
     border: 2px solid rgba(255, 255, 255, 0.377);

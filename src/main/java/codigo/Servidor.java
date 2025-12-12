@@ -1,16 +1,16 @@
 package codigo;
 
-import com.sun.net.httpserver.HttpServer;
-import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer; // Biblioteca para criar servidor HTTP embutido
+import com.sun.net.httpserver.HttpExchange; // Representa uma requisição/response HTTP
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.net.URLDecoder;
+import java.net.URLDecoder; // Decodifica dados de formulário
 import java.nio.charset.StandardCharsets;
-import java.sql.*;
+import java.sql.*; // JDBC para banco SQLite
 
 public class Servidor {
 
-    private static Connection con;
+    private static Connection con; // Conexão global com o banco de dados
 
     public static void main(String[] args) throws Exception {
 
@@ -28,112 +28,117 @@ public class Servidor {
                 ")";
         con.createStatement().execute(sql);
 
-        // Criar servidor HTTP
+        // Criar servidor HTTP na porta 8083
         HttpServer s = HttpServer.create(new InetSocketAddress(8083), 0);
 
-        // Rotas básicas
-        s.createContext("/", Servidor::login);           // processa login
-        s.createContext("/login", Servidor::login);           // processa login
-        s.createContext("/professor", Servidor::professor);     // cadastro
-        s.createContext("/aluno", Servidor::aluno); // lista cards
-        s.createContext("/avaliar", Servidor::avaliar);       // curtir / não curtir
-        s.createContext("/estilo", t -> enviarCSS(t, "estilo.css")); // CSS
-        s.createContext("/acessonegado", t -> enviar(t, "acessonegado.html"));
-        s.createContext("/concha2.png", t -> enviarImagem(t, "/image/concha2.png")); // IMAGEM
+        // Definição das rotas
+        s.createContext("/", Servidor::login);            // Tela e processamento do login
+        s.createContext("/login", Servidor::login);       // Mesma função do login
+        s.createContext("/professor", Servidor::professor);   // Cadastrar atividades
+        s.createContext("/aluno", Servidor::aluno);       // Listar cards
+        s.createContext("/avaliar", Servidor::avaliar);   // Marcar como feito / não feito
+        s.createContext("/estilo", t -> enviarCSS(t, "estilo.css")); // Enviar CSS
+        s.createContext("/acessonegado", t -> enviar(t, "acessonegado.html")); // Página de acesso negado
+
+        // Envio de imagens estáticas
+        s.createContext("/concha2.png", t -> enviarImagem(t, "/image/concha2.png"));
         s.createContext("/fundo.png", t -> enviarImagem(t, "/image/fundo.png"));
+
         s.start();
         System.out.println("Servidor rodando em http://localhost:8083/");
     }
 
     // -------------------- LOGIN --------------------
-        private static void login (HttpExchange t) throws IOException {
-            if (!t.getRequestMethod().equalsIgnoreCase("POST")) {
-                enviar(t, "login.html");
-                return;
+    private static void login (HttpExchange t) throws IOException {
+        if (!t.getRequestMethod().equalsIgnoreCase("POST")) {
+            enviar(t, "login.html"); // Exibe página de login
+            return;
+        }
+
+        String corpo = ler(t); // Lê corpo do formulário
+        corpo = URLDecoder.decode(corpo, StandardCharsets.UTF_8);
+
+        // Divide os campos enviados pelo formulário
+        String[] partes = corpo.split("&");
+        String usuario = partes[0].replace("usuario=", "");
+        String senha = partes[1].replace("senha=", "");
+        String perfil = partes[2].replace("perfil=", "");
+
+        // ---------------- Validação de LOGIN --------------------
+
+        // ----------- Professores --------------
+        if (perfil.contains("professor")) {
+
+            // Logins permitidos
+            if (usuario.equals("professor") && senha.equals("1234")) {
+                System.out.println("Acesso autorizado: Professor");
+                t.getResponseHeaders().set("Location", "/professor");
+                t.sendResponseHeaders(302, -1); // Redireciona
             }
-
-            String corpo = ler(t); // exemplo: tipo=produtor
-            corpo = URLDecoder.decode(corpo, StandardCharsets.UTF_8);
-            // Cadastro dos Professores
-            //String query = t.getRequestURI().getQuery(); // usuario=luiza&senha=12345&perfil=professor
-            String[] partes = corpo.split("&");
-            String usuario = partes[0].replace("usuario=", "");
-            String senha = partes[1].replace("senha=", "");
-            String perfil = partes[2].replace("perfil=", "");
-
-
-
-
-            //-------------------------------- Cadastro dos Professores-----------------------------------
-
-            // Validação de login para Professores
-            if (perfil.contains("professor")) {
-                if (usuario.equals("professor") && senha.equals("1234")) {
-                    System.out.println("Acesso autorizado: Professor");
-                    t.getResponseHeaders().set("Location", "/professor");
-                    t.sendResponseHeaders(302, -1);
-                }
-                else if (usuario.equals("arieldias") && senha.equals("1234")) {
-                    System.out.println("Acesso autorizado: Professor Ariel Dias");
-                    t.getResponseHeaders().set("Location", "/professor");
-                    t.sendResponseHeaders(302, -1);
-                }
-                else if (usuario.equals("eduardofalabella") && senha.equals("1234")) {
-                    System.out.println("Acesso autorizado: Professor Eduardo Falabella");
-                    t.getResponseHeaders().set("Location", "/professor");
-                    t.sendResponseHeaders(302, -1);
-                }
-                else {
-                    System.out.println("Acesso negado");
-                    t.getResponseHeaders().set("Location", "/acessonegado");
-                    t.sendResponseHeaders(302, -1);
-                }
+            else if (usuario.equals("arieldias") && senha.equals("1234")) {
+                System.out.println("Acesso autorizado: Professor Ariel Dias");
+                t.getResponseHeaders().set("Location", "/professor");
+                t.sendResponseHeaders(302, -1);
             }
-
-            // Validação de login para Alunos
-            else if (perfil.contains("aluno")) {
-                if (usuario.equals("aluno") && senha.equals("1234")) {
-                    System.out.println("Acesso autorizado: Aluno");
-                    t.getResponseHeaders().set("Location", "/aluno");
-                    t.sendResponseHeaders(302, -1);
-                } else if (usuario.equals("gustavonunes") && senha.equals("1234")) {
-                    System.out.println("Acesso autorizado: Aluno Gustavo Nunes");
-                    t.getResponseHeaders().set("Location", "/aluno");
-                    t.sendResponseHeaders(302, -1);
-                } else if (usuario.equals("carinasouza") && senha.equals("1234")) {
-                    System.out.println("Acesso autorizado: Aluna Carina Souza");
-                    t.getResponseHeaders().set("Location", "/aluno");
-                    t.sendResponseHeaders(302, -1);
-                } else if (usuario.equals("luizatimporini") && senha.equals("1234")) {
-                    System.out.println("Acesso autorizado: Aluna Luiza Timporini");
-                    t.getResponseHeaders().set("Location", "/aluno");
-                    t.sendResponseHeaders(302, -1);
-                } else {
-                    System.out.println("Acesso negado - Aluno");
-                    t.getResponseHeaders().set("Location", "/acessonegado");
-                    t.sendResponseHeaders(302, -1);
-                }
-            } else {
+            else if (usuario.equals("eduardofalabella") && senha.equals("1234")) {
+                System.out.println("Acesso autorizado: Professor Eduardo Falabella");
+                t.getResponseHeaders().set("Location", "/professor");
+                t.sendResponseHeaders(302, -1);
+            }
+            else {
                 System.out.println("Acesso negado");
                 t.getResponseHeaders().set("Location", "/acessonegado");
                 t.sendResponseHeaders(302, -1);
             }
         }
 
+        // ----------- Alunos --------------
+        else if (perfil.contains("aluno")) {
 
+            if (usuario.equals("aluno") && senha.equals("1234")) {
+                System.out.println("Acesso autorizado: Aluno");
+                t.getResponseHeaders().set("Location", "/aluno");
+                t.sendResponseHeaders(302, -1);
 
-    // -------------------- PROFESSOR --------------------------------------//
+            } else if (usuario.equals("gustavonunes") && senha.equals("1234")) {
+                System.out.println("Acesso autorizado: Aluno Gustavo Nunes");
+                t.getResponseHeaders().set("Location", "/aluno");
+                t.sendResponseHeaders(302, -1);
 
+            } else if (usuario.equals("carinasouza") && senha.equals("1234")) {
+                System.out.println("Acesso autorizado: Aluna Carina Souza");
+                t.getResponseHeaders().set("Location", "/aluno");
+                t.sendResponseHeaders(302, -1);
+
+            } else if (usuario.equals("luizatimporini") && senha.equals("1234")) {
+                System.out.println("Acesso autorizado: Aluna Luiza Timporini");
+                t.getResponseHeaders().set("Location", "/aluno");
+                t.sendResponseHeaders(302, -1);
+
+            } else {
+                System.out.println("Acesso negado - Aluno");
+                t.getResponseHeaders().set("Location", "/acessonegado");
+                t.sendResponseHeaders(302, -1);
+            }
+        }
+        else {
+            System.out.println("Acesso negado");
+            t.getResponseHeaders().set("Location", "/acessonegado");
+            t.sendResponseHeaders(302, -1);
+        }
+    }
+
+    // -------------------- PROFESSOR --------------------
     private static void professor(HttpExchange t) throws IOException {
 
         if (!t.getRequestMethod().equalsIgnoreCase("POST")) {
-            enviar(t, "professor.html");
+            enviar(t, "professor.html"); // Exibe formulário para cadastrar tarefa
             return;
         }
 
         String c = URLDecoder.decode(ler(t), StandardCharsets.UTF_8);
 
-
+        // Divide os campos do formulário
         String[] partes;
         partes = c.split("&");
         String tarefa = partes[0].replace("tarefa=", "");
@@ -141,13 +146,13 @@ public class Servidor {
         String data = partes[2].replace("data=", "");
         String observacao = partes[3].replace("observacao=", "");
 
-
+        // Usa método auxiliar para pegar cada campo
         String tare = pega(c, "tarefa");
         String mate = pega(c, "materia");
         String date = pega(c, "data");
         String obse = pega(c, "observacao");
 
-
+        // Insere no banco de dados SQLite
         try (PreparedStatement ps = con.prepareStatement(
                 "INSERT INTO dadosx (tarefa, materia, data, observacao, feito) VALUES (?,?,?,?,?)")) {
 
@@ -155,21 +160,21 @@ public class Servidor {
             ps.setString(2, mate);
             ps.setString(3, date);
             ps.setString(4, obse);
-            ps.setString(5, "nenhuma"); // ainda não curtido
+            ps.setString(5, "nenhuma"); // Status inicial
             ps.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        redirecionar(t, "/professor");
+        redirecionar(t, "/professor"); // Recarrega página
     }
 
-    // -------------------- ALUNO (lista todos os cards) --------------------
-
+    // -------------------- ALUNO --------------------
     private static void aluno(HttpExchange t) throws IOException {
         StringBuilder html = new StringBuilder();
-    
+
+        // Monta página HTML manualmente
         html.append("<!DOCTYPE html>");
         html.append("<html><head>");
         html.append("<meta charset=\"UTF-8\">");
@@ -180,6 +185,7 @@ public class Servidor {
         html.append("<h1>Atividades</h1>");
         html.append("<p>Cada tarefa aparece em um card separado.</p>");
 
+        // Busca tarefas no banco
         try (Statement st = con.createStatement();
              ResultSet rs = st.executeQuery("SELECT id, tarefa, materia, data, observacao, feito FROM dadosx ORDER BY id DESC")) {
 
@@ -195,7 +201,7 @@ public class Servidor {
                 String obse = rs.getString("observacao");
                 String feito = rs.getString("feito");
 
-                // Classe extra para cor do card
+                // Aplica estilo dependendo do status
                 String classeExtra = "";
                 if ("feito".equals(feito)) {
                     classeExtra = " card-feito";
@@ -226,7 +232,6 @@ public class Servidor {
                 html.append("<button type=\"submit\">Não Feito</button>");
                 html.append("</form>");
 
-
                 html.append("</div>");
             }
 
@@ -241,7 +246,7 @@ public class Servidor {
 
         html.append("</body></html>");
 
-        // Enviar HTML gerado
+        // Envia a resposta HTML
         byte[] b = html.toString().getBytes(StandardCharsets.UTF_8);
         t.getResponseHeaders().add("Content-Type", "text/html; charset=UTF-8");
         t.sendResponseHeaders(200, b.length);
@@ -249,8 +254,7 @@ public class Servidor {
         t.close();
     }
 
-    // -------------------- REALIZAR ATIVIDADE --------------------
-
+    // -------------------- AVALIAÇÃO DA TAREFA --------------------
     private static void avaliar(HttpExchange t) throws IOException {
 
         if (!t.getRequestMethod().equalsIgnoreCase("POST")) {
@@ -259,13 +263,13 @@ public class Servidor {
         }
 
         String corpo = URLDecoder.decode(ler(t), StandardCharsets.UTF_8);
-        String acao = pega(corpo, "acao"); // "curtir" ou "nao"
+        String acao = pega(corpo, "acao"); // Feito ou Não Feito
         String idStr = pega(corpo, "id");
 
         try {
             int id = Integer.parseInt(idStr);
-            System.out.println(idStr);
 
+            // Atualiza banco
             try (PreparedStatement ps = con.prepareStatement(
                     "UPDATE dadosx SET feito = ? WHERE id = ?")) {
                 ps.setString(1, acao);
@@ -280,10 +284,7 @@ public class Servidor {
         redirecionar(t, "/aluno");
     }
 
-
-
     // -------------------- ENVIAR IMAGEM --------------------
-
     private static void enviarImagem(HttpExchange t, String arquivo) throws IOException {
         File f = new File("src/main/java/codigo" + arquivo);
 
@@ -295,9 +296,7 @@ public class Servidor {
     }
 
     // -------------------- Funções auxiliares --------------------
-
     private static String pega(String corpo, String campo) {
-        // corpo no formato: campo1=valor1&campo2=valor2...
         for (String s : corpo.split("&")) {
             String[] p = s.split("=");
             if (p.length == 2 && p[0].equals(campo)) return p[1];
@@ -333,7 +332,7 @@ public class Servidor {
 
     private static void redirecionar(HttpExchange t, String rota) throws IOException {
         t.getResponseHeaders().add("Location", rota);
-        t.sendResponseHeaders(302, -1);
+        t.sendResponseHeaders(302, -1); // Código de redirecionamento
         t.close();
     }
 }

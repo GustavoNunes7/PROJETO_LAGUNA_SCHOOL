@@ -1,36 +1,36 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br"> <!-- Idioma da página (português) -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://app.unpkg.com/css.gg@2.0.0/files/icons">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Carrois+Gothic+SC&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/estilo">
-    <title>Tarefas</title>
+    <meta charset="UTF-8"> <!-- Codificação de caracteres -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsividade -->
+    <link rel="stylesheet" href="https://app.unpkg.com/css.gg@2.0.0/files/icons"> <!-- Ícones -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"> <!-- Pré-conexão com Google Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <!-- Pré-conexão com Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&display=swap" rel="stylesheet"> <!-- Fonte personalizada -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"> <!-- Pré-conexão com Google Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <!-- Pré-conexão com Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Carrois+Gothic+SC&display=swap" rel="stylesheet"> <!-- Outra fonte personalizada -->
+    <link rel="stylesheet" href="/estilo"> <!-- Estilos próprios -->
+    <title>Laguna School - Tarefas</title> <!-- Título da página -->
 </head>
 <body>
-<main class="container">
-    <form action="/professor" method="post">
+<main class="container"> <!-- Conteúdo principal -->
+    <form action="/professor" method="post"> <!-- Formulário para enviar dados -->
         <div class="log">
-            <h2>Tarefas 📑</h2>
+            <h2>Tarefas 📑</h2> <!-- Título da seção -->
         </div>
         <br>
 
         <div class="tarefa">
             <label for="tarefa">
-                    <textarea id="tarefa" name="tarefa" rows="6" cols="40" required>
-                    </textarea>
+                    <textarea id="tarefa" name="tarefa" rows="6" cols="40" required></textarea> <!-- Campo para descrever a tarefa -->
             </label>
         </div>
+        
         <div class="container-2">
             <div class="input-box">
-                <select id="materia" name="materia"  required>
-                    <option value="Máteria">Máteria</option>
+                <select id="materia" name="materia" required> <!-- Seleção de matéria -->
+                    <option value="Máteria" disabled selected>Máteria</option>
                     <option value="Arte">Arte 🎨</option>
                     <option value="Biologia">Biologia 🧬</option>
                     <option value="Educaçao-Fisica">Educação Física ⚽</option>
@@ -48,26 +48,26 @@
                     <option value="Back-end">Programação Back-End 🧑‍💻</option>
                     <option value="BancodeDados">Banco de Dados 🛢️</option>
                     <option value="Projetos">Projetos de Software 📋</option>
-                    </select>
+                </select>
             </div>
 
             <div class="input-box">
                 <label>Data:</label><br>
-                <input type="date" name="data" required><br><br>
+                <input type="date" name="data" required><br><br> <!-- Campo para data -->
             </div><br>
         </div>
 
         <div class="observacao">
             <label>Observação:</label>
-            <input type="text" name="observacao" >
+            <input type="text" name="observacao"> <!-- Campo para observações -->
         </div>
         <br>
-        <div class="buttonstarefas"></div>
-            <button type="submit">Adicionar</button>
+        
+        <div class="buttonstarefas">
+            <button type="submit">Adicionar</button> <!-- Botão para adicionar tarefa -->
+        </div>
 
-        </div>
-        </div>
     </form>
-    </main>
+</main>
 </body>
 </html>
