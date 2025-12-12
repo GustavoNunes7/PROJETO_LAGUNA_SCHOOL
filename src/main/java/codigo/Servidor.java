@@ -116,7 +116,7 @@ public class Servidor {
                 t.sendResponseHeaders(302, -1);
 
             } else {
-                System.out.println("Acesso negado - Aluno");
+                System.out.println("Acesso negado");
                 t.getResponseHeaders().set("Location", "/acessonegado");
                 t.sendResponseHeaders(302, -1);
             }
